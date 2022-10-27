@@ -2,12 +2,13 @@
 
 # ----------------------------------------------------------------
 echo -e "\n\nUpdating Apt Packages and upgrading latest patches\n"
-sudo apt-get update -y
+sudo apt update -y
+sudo apt install -y zip
 # ----------------------------------------------------------------
 
 # ----------------------------------------------------------------
 echo -e "\n\nInstalling Apache2 Web server\n"
-sudo apt install zip apache2 apache2-utils ssl-cert -y
+sudo apt install apache2 apache2-utils ssl-cert -y
 
 sudo ufw allow in \"Apache\""
 # ----------------------------------------------------------------
