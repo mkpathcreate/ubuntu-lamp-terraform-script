@@ -7,7 +7,8 @@ sudo apt-get update -y
 
 # ----------------------------------------------------------------
 echo -e "\n\nInstalling Apache2 Web server\n"
-sudo apt-get install apache2 apache2-utils libexpat1 ssl-cert -y
+sudo apt install apache2 apache2-utils ssl-cert -y
+
 sudo ufw allow in \"Apache\""
 # ----------------------------------------------------------------
 
