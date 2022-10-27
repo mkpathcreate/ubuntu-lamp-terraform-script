@@ -7,23 +7,23 @@ sudo apt-get update -y
 
 # ----------------------------------------------------------------
 echo -e "\n\nUninstalling Apache2 Web server\n"
-sudo apt-get remove --purge apache2 apache2-utils libexpat1 ssl-cert -y
+sudo apt-get remove apache2 apache2-utils libexpat1 ssl-cert -y
 # ----------------------------------------------------------------
 
 # ----------------------------------------------------------------
 echo -e "\n\nUninstalling PHP & Requirements\n"
-sudo apt remove --purge -y libapache2-mod-php
-sudo apt remove --purge -y php-{mysql,zip,json,common,bcmath,common,cli,dev,mcrypt,curl,opcache,readline}
+sudo apt remove -y libapache2-mod-php
+sudo apt remove -y php-{mysql,zip,json,common,bcmath,common,cli,dev,mcrypt,curl,opcache,readline}
 # ----------------------------------------------------------------
 
 # ----------------------------------------------------------------
 echo -e "\n\nUninstalling MariaDB\n"
-sudo apt remove --purge -y mariadb-server mariadb-client
+sudo apt remove -y mariadb-server mariadb-client
 # ----------------------------------------------------------------
 
 # ----------------------------------------------------------------
 echo -e "\n\nUninstalling phpmyadmin\n"
 
-sudo apt remove --purge phpmyadmin
+sudo apt remove phpmyadmin
 sudo reboot
 echo -e "\n\nLAMP Installation Completed"
