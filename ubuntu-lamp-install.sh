@@ -33,7 +33,7 @@ sudo a2enmod php8.1
 
 # ----------------------------------------------------------------
 echo -e "\n\nRestarting Apache\n"
-sudo echo \"<?php phpinfo(\); ?>\"  > /home/ubuntu/index.php
+sudo echo \"<?php phpinfo\(\); ?>\"  > /home/ubuntu/index.php
 sudo mv /home/ubuntu/index.php /var/www/html/
 sudo systemctl restart apache2
 # ----------------------------------------------------------------
