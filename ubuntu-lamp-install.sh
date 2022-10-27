@@ -28,12 +28,12 @@ sudo apt install -y php-{mysql,zip,json,common,bcmath,common,cli,dev,mcrypt,curl
 echo -e "\n\nEnabling Modules\n"
 sudo a2enmod rewrite
 sudo phpenmod mcrypt
-sudo a2enmod php8.1"
+sudo a2enmod php8.1
 # ----------------------------------------------------------------
 
 # ----------------------------------------------------------------
 echo -e "\n\nRestarting Apache\n"
-sudo echo \"<?php phpinfo(); ?>\"  > /home/ubuntu/index.php"
+sudo echo \"<?php phpinfo(); ?>\"  > /home/ubuntu/index.php
 sudo mv /home/ubuntu/index.php /var/www/html/
 sudo systemctl restart apache2
 # ----------------------------------------------------------------
