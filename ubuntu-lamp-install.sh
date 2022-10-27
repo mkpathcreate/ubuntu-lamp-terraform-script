@@ -24,7 +24,7 @@ echo -e "\n\n Permissions have been set\n"
 # ----------------------------------------------------------------
 echo -e "\n\nInstalling PHP & Requirements\n"
 sudo apt install -y libapache2-mod-php
-sudo apt install -y php-{mysql,zip,json,common,bcmath,common,cli,dev,mcrypt,curl,opcache,readline}
+sudo apt install -y php-{mysql,zip,json,common,bcmath,common,cli,dev,curl,opcache,readline}
 # ----------------------------------------------------------------
 
 # ----------------------------------------------------------------
