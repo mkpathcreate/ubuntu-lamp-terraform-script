@@ -3,10 +3,6 @@ This script can be referenced within terraform script to install LAMP stack afte
 
 
 In terraform script, add the following.
-
-Source:
-curl -sL https://gist.github.com/ImaginativeShohag/45aeb30b3e43dcf95bf73cb2a4e77046/raw | sudo bash -
-
 ```
 provisioner "remote-exec" { 
     inline = [
@@ -15,3 +11,5 @@ provisioner "remote-exec" {
     ]
   }
 ```
+Source:
+curl -sL https://gist.github.com/ImaginativeShohag/45aeb30b3e43dcf95bf73cb2a4e77046/raw | sudo bash -
