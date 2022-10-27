@@ -221,5 +221,4 @@ printf "Task done.\n\n"
 # ----------------------------------------------------------------
 
 echo "Everything is successfully done. Enjoy..."
-echo -e "\n\nLAMP Installation Completed"
 exit 0
