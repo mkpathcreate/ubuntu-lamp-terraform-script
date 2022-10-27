@@ -11,7 +11,7 @@ sudo apt install unzip -y
 echo -e "\n\nInstalling Apache2 Web server\n"
 sudo apt install apache2 -y
 
-sudo ufw allow in \"Apache\""
+sudo ufw allow in \"Apache\"
 # ----------------------------------------------------------------
 
 # ----------------------------------------------------------------
