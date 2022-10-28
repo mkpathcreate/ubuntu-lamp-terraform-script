@@ -2,7 +2,7 @@
 
 # ----------------------------------------------------------------
 echo -e "\n\nUpdating Apt Packages and upgrading latest patches\n"
-sudo apt update -y
+#sudo apt update -y
 sudo apt install zip -y
 sudo apt install unzip -y
 # ----------------------------------------------------------------
