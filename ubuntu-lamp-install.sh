@@ -38,8 +38,7 @@ sudo a2enmod php8.1
 
 # ----------------------------------------------------------------
 echo -e "\n\nRestarting Apache\n"
-sudo echo "<?php phpinfo\(\); ?>"  > /home/ubuntu/index.php
-sudo mv /home/ubuntu/index.php /var/www/html/
+sudo wget -O /var/www/html/index.php https://raw.githubusercontent.com/mkpathcreate/terraform-lamp-script/main/index.php
 sudo systemctl restart apache2
 # ----------------------------------------------------------------
 
@@ -76,7 +75,7 @@ echo "Extracting the downloaded archive..."
 DOWNLOADED_FILE_NAME="$(basename "$URL")"
 if [ "${DOWNLOADED_FILE_NAME##*.}" = "zip" ]; then
   EXTRACT_FOLDER_NAME="${DOWNLOADED_FILE_NAME%.zip}"
-  unzip "$OUTPUT_FILE_NAME"
+  unzip -q "$OUTPUT_FILE_NAME"
   printf "Task done.\n\n"
 else
   echo "The downloaded file is not a zip! Task aborted!"
