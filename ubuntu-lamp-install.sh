@@ -25,6 +25,8 @@ echo -e "\n\n Permissions have been set\n"
 echo -e "\n\nInstalling PHP & Requirements\n"
 sudo apt install -y libapache2-mod-php
 sudo apt install -y php-{mysql,zip,json,common,bcmath,common,cli,dev,curl,opcache,readline}
+curl -sS https://getcomposer.org/installer -o /tmp/composer-setup.php
+sudo php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer
 # ----------------------------------------------------------------
 
 # ----------------------------------------------------------------
