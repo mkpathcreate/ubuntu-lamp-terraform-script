@@ -4,6 +4,8 @@
 echo -e "\n\nUpdating Apt Packages and upgrading latest patches\n"
 sudo sed -i 's/#$nrconf{restart} = '"'"'i'"'"';/$nrconf{restart} = '"'"'a'"'"';/g' /etc/needrestart/needrestart.conf
 sudo apt update -y
+#sudo apt upgrade -y
+#sudo reboot
 sudo apt-get -y install debconf-utils
 sudo apt install zip -y
 sudo apt install unzip -y
@@ -49,8 +51,8 @@ sudo systemctl restart apache2
 # ----------------------------------------------------------------
 echo -e "\n\nInstalling MariaDB\n"
 sudo export DEBIAN_FRONTEND="noninteractive"
-sudo debconf-set-selections<<<"mariadb-server mysql-server/root_password password Rhytha268!"
-sudo debconf-set-selections<<<"mariadb-server mysql-server/root_password_again password Rhytha268!" 
+sudo debconf-set-selections<<<"mariadb-server mysql-server/root_password password Rotxerd689!"
+sudo debconf-set-selections<<<"mariadb-server mysql-server/root_password_again password Rotxerd689!" 
 sudo DEBIAN_FRONTEND=noninteractive sudo apt install -y mariadb-server mariadb-client
 sudo systemctl enable mariadb
 sudo systemctl start mariadb
@@ -71,9 +73,6 @@ sudo DEBIAN_FRONTEND=noninteractive apt install -q -y phpmyadmin
 #phpmyadmin_url=$(tr </dev/urandom -dc A-Za-z0-9_- | head -c32)
 phpmyadmin_url="phpmyadmin"
 sudo sed -i 's/Alias \/phpmyadmin \/usr\/share\/phpmyadmin/#Alias \/phpmyadmin \/usr\/share\/phpmyadmin\nAlias \/'$phpmyadmin_url' \/usr\/share\/phpmyadmin/' /etc/apache2/conf-available/phpmyadmin.conf
-#echo "CREATE USER 'mariaadmin'@localhost IDENTIFIED BY 'Rhytha268!';GRANT ALL PRIVILEGES ON *.* TO 'mariaadmin'@localhost IDENTIFIED BY 'Rhytha268!';FLUSH PRIVILEGES;" | sudo mysql -u root
-
-
 
 sudo service apache2 reload
 
@@ -83,7 +82,7 @@ sudo chmod 0600 ~/.my.cnf
 
 # ----------------------------------------------------------------
 echo "Letsencrypt for SSL..."	
-	sudo apt-get -y install python-certbot-apache
+	sudo apt -y install certbot python3-certbot-apache
 # ----------------------------------------------------------------
 
 # ----------------------------------------------------------------
@@ -91,7 +90,19 @@ echo "Restarting Apache server..."
 sudo systemctl restart apache2
 printf "Task done.\n\n"
 # ----------------------------------------------------------------
-echo -e "###########  * DETIALS *  ###########\n\nSite Directory : /var/www/html/$domain\nHost file for $domain : /etc/apache2/sites-available/$domain.conf\n-------------------------------------\nPhpMyAdmin URL : $domain/$phpmyadmin_url\nMySQL Information -\n\t user : root\n\t password : Rhytha268! \n-------------------------------------\n\n\tCreate a backup for Directory : /etc/letsencrypt/" | tee -a details.txt
+echo -e "###########  * DETIALS *  ###########\n\nSite Directory : /var/www/html/$domain\nHost file for $domain : /etc/apache2/sites-available/$domain.conf\n-------------------------------------\nPhpMyAdmin URL : $domain/$phpmyadmin_url\nMySQL Information -\n\t user : mariaadmin\n\t password : Pxcyt268! \n-------------------------------------\n\n\tCreate a backup for Directory : /etc/letsencrypt/" | tee -a details.txt
 
+
+sudo mariadb <<MYSQL_INPUT
+CREATE USER 'mariaadmin'@localhost IDENTIFIED BY 'Pxcyt268!';
+GRANT ALL PRIVILEGES ON *.* TO 'mariaadmin'@localhost IDENTIFIED BY 'Pxcyt268!';
+FLUSH PRIVILEGES;
+SELECT User FROM mysql.user;
+MYSQL_INPUT
+
+
+echo "<center><h1>The page was created by the Izumo Data using Terraform</h1></center>" | sudo tee /var/www/html/index.html
 echo "Everything is successfully done. Enjoy..."
-exit 0
+sleep 5s
+sudo reboot
+#exit 0

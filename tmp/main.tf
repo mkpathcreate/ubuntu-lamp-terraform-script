@@ -17,6 +17,27 @@ provider "aws" {
 }
 #get AZ's details
 data "aws_availability_zones" "availability_zones" {}
+#local variables
+resource "random_password" "mariadb_root" {
+  length           = 16
+  special          = true
+  override_special = "!#$%&*()-_=+[]{}<>:?"
+}
+resource "random_password" "mariadb_admin" {
+  length           = 16
+  special          = true
+  override_special = "!#$%&*()-_=+[]{}<>:?"
+}
+output "mariadb_admin" {
+  description = "The password for mysqladmin is:"
+  sensitive   = true
+  value       = random_password.mariadb_admin.result
+}
+output "mariadb_root" {
+  description = "The password for mysqlroot is:"
+  sensitive   = true
+  value       = random_password.mariadb_root.result
+}
 #create VPC
 resource "aws_vpc" "myvpc" {
   cidr_block           = var.vpc_cidr
@@ -155,6 +176,10 @@ resource "aws_security_group_rule" "db_egress" {
   security_group_id = aws_security_group.db_security_group.id
 }
 #create EC2 instance
+locals {
+  mysql_root   = random_password.mariadb_root.result
+  mysql_admin    = random_password.mariadb_admin.result
+}
 resource "aws_instance" "my_web_instance" {
   ami                    = lookup(var.images, var.region)
   instance_type          = "t2.micro"
@@ -168,26 +193,6 @@ resource "aws_instance" "my_web_instance" {
   volume_tags = {
     Name = "my_web_instance_volume"
   }
-
-  /*
-  provisioner "remote-exec" { #install apache, mysql client, php
-    inline = [
-    "sudo /tmp/",
-    "curl -sL https://raw.githubusercontent.com/mkpathcreate/terraform-lamp-script/main/ubuntu-lamp-install.sh | sudo bash -",    
-    ]
-    
-  }
-
-  connection {
-    type     = "ssh"
-    user     = "ubuntu"
-    password = ""
-    host = aws_instance.my_web_instance.public_ip
-    #copy <your_private_key>.pem to your local instance home directory
-    #restrict permission: chmod 400 <your_private_key>.pem
-    private_key = file("/Users/mk/Dropbox/AWSKeys/PhpAgency-Terraform-Keys/7t-php-dev.pem")
-  }
-*/
 }
 
 #create aws rds subnet groups
