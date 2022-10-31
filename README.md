@@ -16,9 +16,6 @@ GRANT ALL PRIVILEGES ON *.* TO 'mariaadmin'@localhost IDENTIFIED BY 'Pxcyt268!';
 ```
 
 
-## Create a directory and get inside it
-mkdir terraform && cd terraform
-
 ## Format code
 terraform fmt
 
