@@ -1,7 +1,6 @@
 
-##-------------------------------------------
 ##  Terraform: Deploy A LAMP Stack In AWS  ##
-##-------------------------------------------
+
 
 Make the following changes in script to make it work for you.
 
