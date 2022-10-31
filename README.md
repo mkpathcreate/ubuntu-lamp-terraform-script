@@ -3,6 +3,49 @@
 ##  Terraform: Deploy A LAMP Stack In AWS  ##
 ##-------------------------------------------
 
+Make the following changes in script to make it work for you.
+
+**Edit variables.tf**
+
+Choose Region
+```
+variable "region" {
+  default = "us-west-2"
+}
+```
+
+This picks up saved AWS Credentials in your AWS cli locally, check with command **aws configure list**, check documentation in this link
+https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html
+```
+variable "profile" {
+  type    = string
+  default = "phporegon123"
+}
+```
+
+The aws key that needs to be used for AWS Instance creation. This should be pre-exist in the region, so create it and update the name here.
+```
+variable "private_key" {
+  default = "AWS-dev-key"
+}
+```
+
+This will add the tags to all resources created for identification.
+```
+variable "project_name" {
+  default = "Terraform from Izumo"
+}
+```
+
+Enviroment, Dev or Prod
+```
+variable "project_environment" {
+  default = "dev"
+}
+```
+
+**Edit ubuntu-lamp-install.sh**
+
 Edit the passwords in the ubuntu-lamp-install.sh in line 54,56 for mariaDB root password
 
 ```
