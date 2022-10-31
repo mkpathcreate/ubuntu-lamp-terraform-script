@@ -1,6 +1,14 @@
 
 ##  Terraform: Deploy A LAMP Stack In AWS  ##
 
+**This script will deploy a Ubuntu (22.xx) and install**
+*
+- Apache2
+ - MariaDB
+ - PHP
+ - phpmyadmin
+*
+
 
 Make the following changes in script to make it work for you.
 
