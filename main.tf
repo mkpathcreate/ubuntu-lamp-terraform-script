@@ -3,6 +3,7 @@ provider "aws" {
   profile = var.profile
 
   #This picks up the API ID and Secret Key saved in variables.tf
+  #Not recommended method
   #access_key = "${var.access_key}"
   #secret_key = "${var.secret_key}"  
 
@@ -10,8 +11,8 @@ provider "aws" {
   region = var.region
   default_tags {
     tags = {
-      Environment = "Pre-Prod"
-      Service     = "LAMP Setup by MK"
+      Environment = var.project_environment
+      Service     = var.project_name
     }
   }
 }
@@ -29,7 +30,7 @@ resource "aws_subnet" "myvpc_public_subnet" {
   availability_zone       = data.aws_availability_zones.availability_zones.names[0]
   map_public_ip_on_launch = true
   tags = {
-    Name = "myvpc_public_subnet"
+    Name = "${var.project_name}-${var.project_environment}-myvpc_public_subnet"
   }
 }
 #create private subnet one
@@ -38,7 +39,7 @@ resource "aws_subnet" "myvpc_private_subnet_one" {
   cidr_block        = element(var.subnet_two_cidr, 0)
   availability_zone = data.aws_availability_zones.availability_zones.names[0]
   tags = {
-    Name = "myvpc_private_subnet_one"
+    Name = "${var.project_name}-${var.project_environment}-myvpc_private_subnet_one"
   }
 }
 #create private subnet two
@@ -47,14 +48,14 @@ resource "aws_subnet" "myvpc_private_subnet_two" {
   cidr_block        = element(var.subnet_two_cidr, 1)
   availability_zone = data.aws_availability_zones.availability_zones.names[1]
   tags = {
-    Name = "myvpc_private_subnet_two"
+    Name = "${var.project_name}-${var.project_environment}-myvpc_private_subnet_two"
   }
 }
 #create internet gateway
 resource "aws_internet_gateway" "myvpc_internet_gateway" {
   vpc_id = aws_vpc.myvpc.id
   tags = {
-    Name = "myvpc_internet_gateway"
+    Name = "${var.project_name}-${var.project_environment}-myvpc_internet_gateway"
   }
 }
 #create public route table (assosiated with internet gateway)
@@ -65,21 +66,21 @@ resource "aws_route_table" "myvpc_public_subnet_route_table" {
     gateway_id = aws_internet_gateway.myvpc_internet_gateway.id
   }
   tags = {
-    Name = "myvpc_public_subnet_route_table"
+    Name = "${var.project_name}-${var.project_environment}-myvpc_public_subnet_route_table"
   }
 }
 #create private subnet route table
 resource "aws_route_table" "myvpc_private_subnet_route_table" {
   vpc_id = aws_vpc.myvpc.id
   tags = {
-    Name = "myvpc_private_subnet_route_table"
+    Name = "${var.project_name}-${var.project_environment}-myvpc_private_subnet_route_table"
   }
 }
 #create default route table
 resource "aws_default_route_table" "myvpc_main_route_table" {
   default_route_table_id = aws_vpc.myvpc.default_route_table_id
   tags = {
-    Name = "myvpc_main_route_table"
+    Name = "${var.project_name}-${var.project_environment}-myvpc_main_route_table"
   }
 }
 #assosiate public subnet with public route table
@@ -102,7 +103,7 @@ resource "aws_security_group" "web_security_group" {
   description = "Allow all inbound traffic"
   vpc_id      = aws_vpc.myvpc.id
   tags = {
-    Name = "myvpc_web_security_group"
+    Name = "${var.project_name}-${var.project_environment}-myvpc_web_security_group"
   }
 }
 #create security group ingress rule for web
@@ -131,7 +132,7 @@ resource "aws_security_group" "db_security_group" {
   description = "Allow all inbound traffic"
   vpc_id      = aws_vpc.myvpc.id
   tags = {
-    Name = "myvpc_db_security_group"
+    Name = "${var.project_name}-${var.project_environment}-myvpc_db_security_group"
   }
 }
 #create security group ingress rule for db
@@ -163,31 +164,13 @@ resource "aws_instance" "my_web_instance" {
   subnet_id              = aws_subnet.myvpc_public_subnet.id
   user_data              = file("ubuntu-lamp-install.sh")
   tags = {
-    Name = "my_web_instance"
+    Name = "${var.project_name}-${var.project_environment}-my_web_instance"
   }
   volume_tags = {
-    Name = "my_web_instance_volume"
+    Name = "${var.project_name}-${var.project_environment}-my_web_instance_volume"
   }
 
-  /*
-  provisioner "remote-exec" { #install apache, mysql client, php
-    inline = [
-    "sudo /tmp/",
-    "curl -sL https://raw.githubusercontent.com/mkpathcreate/terraform-lamp-script/main/ubuntu-lamp-install.sh | sudo bash -",    
-    ]
-    
-  }
-
-  connection {
-    type     = "ssh"
-    user     = "ubuntu"
-    password = ""
-    host = aws_instance.my_web_instance.public_ip
-    #copy <your_private_key>.pem to your local instance home directory
-    #restrict permission: chmod 400 <your_private_key>.pem
-    private_key = file("/Users/mk/Dropbox/AWSKeys/PhpAgency-Terraform-Keys/7t-php-dev.pem")
-  }
-*/
+  
 }
 
 #create aws rds subnet groups
@@ -195,7 +178,7 @@ resource "aws_db_subnet_group" "my_database_subnet_group" {
   name       = "mydbsg"
   subnet_ids = ["${aws_subnet.myvpc_private_subnet_one.id}", "${aws_subnet.myvpc_private_subnet_two.id}"]
   tags = {
-    Name = "my_database_subnet_group"
+    Name = "${var.project_name}-${var.project_environment}-my_database_subnet_group"
   }
 }
 

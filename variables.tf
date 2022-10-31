@@ -8,13 +8,15 @@ variable "region" {
 
 ####Credentials####
 # This picks up saved AWS Credentials in your AWS cli locally, check with command
-#$ aws configure list
+#$ aws configure list, check documentation in this link
+# https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html
 variable "profile" {
   type    = string
   default = "phporegon"
 }
 
-# Entere API ID and Secret Key
+# Entere API ID and Secret Key, this NOT recommended method though, since it exposes
+# access key and sceret key in the code.
 variable "access_key" {
   default = "<your_access_key>"
 }
@@ -25,20 +27,30 @@ variable "secret_key" {
 variable "private_key" {
   default = "7t-php-dev"
 }
+##This will add the tags to all resources created
+#for identification.
+variable "project_name" {
+  default = "Terraform from Izumo"
+}
+# Enviroment, Dev or Prod
+variable "project_environment" {
+  default = "dev"
+}
 
 
 
 
 
 
-
-## Pre-Built Ubuntu LAMP AMI's you can enter here.
+## Pre-Built Ubuntu LAMP AMI's you can enter here. The below is taken from
+# https://cloud-images.ubuntu.com/locator/ec2/ and latest releases.
 variable "images" {
   type = map(string)
   default = {
-    "us-east-1"      = "ami-0937dcc711d38ef3f"
-    "us-east-2"      = "ami-04328208f4f0cf1fe"
-    "us-west-1"      = "ami-0799ad445b5727125"
+    /*
+    "us-east-1"      = "ami-08c40ec9ead489470"
+    "us-east-2"      = "ami-097a2df4ac947655f"
+    "us-west-1"      = "ami-02ea247e531eb3ce6"
     "us-west-2"      = "ami-017fecd1353bcc96e"
     "ap-south-1"     = "ami-062df10d14676e201"
     "ap-northeast-2" = "ami-018a9a930060d38aa"
@@ -51,6 +63,31 @@ variable "images" {
     "eu-west-2"      = "ami-0664a710233d7c148"
     "eu-west-3"      = "ami-0854d53ce963f69d8"
     "eu-north-1"     = "ami-6d27a913"
+    */
+af-south-1= "ami-049f3776a271bc3b7"
+ap-east-1= "ami-0b05a304ab4fa3be8"
+ap-northeast-1= "ami-075b4e4fa32027c1e"
+ap-northeast-2= "ami-06192e39cbbb7a8dc"
+ap-northeast-3= "ami-0e881f8ae26f2d134"
+ap-south-1= "ami-0014a66cfcc80ac59"
+ap-southeast-1= "ami-0720a5ea8181d7788"
+ap-southeast-2= "ami-0e2539ff51477b0e9"
+ap-southeast-3= "ami-02d51c7efeae16ebe"
+ca-central-1= "ami-0bd660bf0bc3f1ae1"
+eu-central-1= "ami-09309b588b3d482e8"
+eu-north-1= "ami-0b7e06f5b396bf4cc"
+eu-south-1= "ami-065518095cabb71aa"
+eu-west-1= "ami-0539dc4a10640398c"
+eu-west-2= "ami-04b57051a8c8f7c8d"
+eu-west-3= "ami-0cdb2b59f7bab04a2"
+me-central-1= "ami-099e4dcb953792c10"
+me-south-1= "ami-0afaec593e1598c33"
+sa-east-1= "ami-032219713a8731e2a"
+us-east-1= "ami-0fc2ee4e15eaf3d80"
+us-east-2= "ami-0cdfb79f8947c76aa"
+us-west-1= "ami-04a16a5d780a10e8f"
+us-west-2= "ami-0838be7ba2ee17e46"
+
   }
 }
 
@@ -74,92 +111,3 @@ variable "web_ports" {
 variable "db_ports" {
   default = ["22", "3306"]
 }
-
-
-#aws provider
-/*
-provider "aws" {
-  access_key = var.access_key
-  secret_key = var.secret_key
-  region     = var.region
-}
-*/
-
-
-
-
-#Pre Requisties 
-/*
-1.) Create Key Pairs with following names in the new region in EC2 Panel.
-
-  7t-php-dev
-	7t-php-dev-app-bastion
-	7t-php-dev-db-bastion
-	7t-php-qa
-	7t-php-sayhey-app-bastion
-	Php_eNoah_Dev
-
-2.) Create Target Groups in EC2 Panel
-
-#This picks up the API ID and Secret Key saved in AWS Configure profile from your local AWS CLI    
-variable "subdomain-name" {
-  type    = string
-  default = "dev-cloudformation.thephpagency.com"
-}
-
-
-variable "profile" {
-  type    = string
-  default = "phporegon"
-}
-#Region To create the Resources
-variable "region" {
-  type    = string
-  default = "us-west-2"
-}
-variable "aws_availability_zone_1" {
-  type    = string
-  default = "us-west-2a"
-}
-variable "aws_availability_zone_2" {
-  type    = string
-  default = "us-west-2b"
-}
-variable "s3service_name" {
-  type    = string
-  default = "com.amazonaws.us-west-2.s3"
-}
-variable "prod_db" {
-  type    = string
-  default = "php-one-world-dev"
-}
-
-
-
-/*
-
-variable "7t-php-dev-app-bastion_key" {
-  type = string  
-  default = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCBSzF22AFej9oUNyBt/m6jB2QyC5KSpOpj9ceX9Eca/eXAM7RVaN3hsNLUwUoW+rUrISOz7qOiDBVixEMhJvV59fKnJnwzpjrm11VJUZTf6pYDchfXGWrVkfZLdHWG8lwpa2daeIcZzOBedcFOMYZGVxqrBXr9Cu3Btmy6nxV2q2JS1998114Gl04eE+ZPdyuXwsbJeqi+2kFpOZfncsd8y1nrHiH6eqr9D+UWp4ZvmhCPUknarpTG5nE+HfvaDtRNeH6noB9kAuI7EsqhBmT7RuZdADGpsZRl+6Ne+CUEvgOfIvGTYTNoDnCXzVYQCxLZ9x4gQwvbuQWtKzuKgT+P"
-}
-
-variable "7t-php-dev-db-bastion_key" {
-  type = string  
-  default = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC7FfwAy0p9PZGrs0jsct6ZvIPK8PQP88wIfBnZua4i/Ht0fUjK+Bvz0qEP8dySPdaq1y+elASJi9+RPUk+9TXLvjkhvIOtrDfY67LO74YKi3kANMK7hayilM/dbGxImJEasTyPEr/LgJ2v7S2JORa/SBeFdrncOT4pVZwu4sO2AFyLlb+mSsMxsWyonwJx9pT1flIDuy1ic50+35nEMS2435T7SowpJ/I7ur3kLIgE9l7srIQLQ+Hx6GdUHDxyX4ewULY+J5ARmBciJRVpK0oH+rU/3jlDfVDcKtaF2anDUMfitmTNvp7jNacRiiZxntB6QlnusHGTeQ0ZzqviWHDh"
-}
-
-variable "eNoah_Php_Stage_Feed_key" {
-  type = string  
-  default = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD3F6tyPEFEzV0LX3X8BsXdMsQz1x2cEikKDEY0aIj41qgxMCP/iteneqXSIFZBp5vizPvaoIR3Um9xK7PGoW8giupGn+EPuxIA4cDM4vzOqOkiMPhz5XK0whEjkVzTo4+S0puvDZuwIsdiW9mxhJc7tgBNL0cYlWSYVkz4G/fslNfRPW5mYAM49f4fhtxPb5ok4Q2Lg9dPKVHO/Bgeu5woMc7RY0p1ej6D4CKFE6lymSDJpW0YHX/wqE9+cfEauh7xZcG0q9t2ta6F6fmX0agvpFyZo8aFbXeUBr7osSCJNgvavWbM/06niWrOvYX2xwWdhXmXSrbX8ZbabVohBK41 email@example.com"
-}
-
-variable "php-dev-qa-stage-solr-backup_key" {
-  type = string  
-  default = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD3F6tyPEFEzV0LX3X8BsXdMsQz1x2cEikKDEY0aIj41qgxMCP/iteneqXSIFZBp5vizPvaoIR3Um9xK7PGoW8giupGn+EPuxIA4cDM4vzOqOkiMPhz5XK0whEjkVzTo4+S0puvDZuwIsdiW9mxhJc7tgBNL0cYlWSYVkz4G/fslNfRPW5mYAM49f4fhtxPb5ok4Q2Lg9dPKVHO/Bgeu5woMc7RY0p1ej6D4CKFE6lymSDJpW0YHX/wqE9+cfEauh7xZcG0q9t2ta6F6fmX0agvpFyZo8aFbXeUBr7osSCJNgvavWbM/06niWrOvYX2xwWdhXmXSrbX8ZbabVohBK41 email@example.com"
-}
-
-variable "7t-phpqa-v1_key" {
-  type = string  
-  default = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD3F6tyPEFEzV0LX3X8BsXdMsQz1x2cEikKDEY0aIj41qgxMCP/iteneqXSIFZBp5vizPvaoIR3Um9xK7PGoW8giupGn+EPuxIA4cDM4vzOqOkiMPhz5XK0whEjkVzTo4+S0puvDZuwIsdiW9mxhJc7tgBNL0cYlWSYVkz4G/fslNfRPW5mYAM49f4fhtxPb5ok4Q2Lg9dPKVHO/Bgeu5woMc7RY0p1ej6D4CKFE6lymSDJpW0YHX/wqE9+cfEauh7xZcG0q9t2ta6F6fmX0agvpFyZo8aFbXeUBr7osSCJNgvavWbM/06niWrOvYX2xwWdhXmXSrbX8ZbabVohBK41 email@example.com"
-}
-*/
